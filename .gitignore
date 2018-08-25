@@ -1,1 +1,5 @@
 #Which files we need to ignore
+/bin/
+
+.classpath
+.project

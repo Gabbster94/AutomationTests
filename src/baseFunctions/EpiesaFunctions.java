@@ -26,15 +26,15 @@ public class EpiesaFunctions {
 	}
 
 	public void InpectionParts(WebDriver pcdriver, String CarModel) throws IOException, InterruptedException {
-		//Log into Epiesa
+		// Log into Epiesa
 		LogIn(pcdriver);
 		Thread.sleep(1000);
-		
-		//Open "Piese Auto" page
+
+		// Open "Piese Auto" page
 		pcdriver.findElement(By.linkText("Piese auto")).click();
-		
-		//If CarModel is: Honda
-		if(CarModel.equals("Honda")) {
+
+		// If CarModel is: Honda
+		if (CarModel.equals("Honda")) {
 			// select Marca HONDA
 			WebElement marca = pcdriver
 					.findElement(By.xpath("/html/body/div[1]/section[1]/div[2]/div[2]/form/div[1]/div/div/select"));
@@ -52,7 +52,8 @@ public class EpiesaFunctions {
 			// click on filtru de aer
 			pcdriver.findElement(By.linkText("Filtru aer")).click();
 			pcdriver.findElement(
-					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[8]/div[2]/div[2]/div[2]/form/a")).click();
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[8]/div[2]/div[2]/div[2]/form/a"))
+					.click();
 
 			// go back to piese auto
 			pcdriver.navigate().back();
@@ -61,7 +62,8 @@ public class EpiesaFunctions {
 			// click on polen
 			pcdriver.findElement(By.linkText("Filtru polen")).click();
 			pcdriver.findElement(
-					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[15]/div[2]/div[2]/div[2]/form/a")).click();
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[15]/div[2]/div[2]/div[2]/form/a"))
+					.click();
 
 			// go back to piese auto
 			pcdriver.navigate().back();
@@ -70,36 +72,52 @@ public class EpiesaFunctions {
 			// click on filtru ulei
 			pcdriver.findElement(By.linkText("Filtru ulei")).click();
 			pcdriver.findElement(
-					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[18]/div[2]/div[2]/div[2]/form/a")).click();
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[18]/div[2]/div[2]/div[2]/form/a"))
+					.click();
 
 			// search in 'cauta dupa cod piesa' and Adauga Cos ulei motor castrol edge 5w30
 			// 4L
 			WebElement uleimotor = pcdriver.findElement(By.xpath("/html/body/div[1]/header/div[2]/form/div[2]/input"));
 			uleimotor.sendKeys("ULEI MOTOR CASTROL EDGE TITANIUM LL 5W30 4L" + Keys.ENTER);
 			pcdriver.findElement(By.xpath("/html/body/div[1]/section[1]/div/div[2]/div/div/div[2]/div/div[2]/form/a"))
-			.click();
+					.click();
 		}
-		//If CarModel is: VW
+		// If CarModel is: VW
 
 	}
 
 	public void ShippingDetails(WebDriver pcdriver) {
 		
+		// Select Ridic personal comanda din Iuliu maniu
+		WebElement alegelocatia = pcdriver.findElement(By.id("id_locatie_livrare"));
+		Select oalegelocatia = new Select(alegelocatia);
+		oalegelocatia.selectByValue("56527");
+
+		// Complete Phone Num date contact
+		pcdriver.findElement(By.xpath("//input[@name= 'telefon_contact']")).sendKeys("0725560116");
+		pcdriver.findElement(By.name("observatii")).sendKeys("This textarea is automated completed by a script.");
+
+		// accept termenii si conditiile
+		pcdriver.findElement(By.xpath("//input[@name= 'termeni_si_conditii']")).click();
 	}
+
 	public static void main(String[] args) throws InterruptedException, IOException {
-		
+
 		// Initilize pcdriver
 		WebDriver pcdriver = null;
 		pcdriver = DriversPrepare.DesktopPrepare("firefox");
-		
-		//Create object of Epiesa Function class
+
+		// Create object of Epiesa Function class
 		EpiesaFunctions EpiesaFunc = new EpiesaFunctions();
-		
+
 		// Call EpiesaFunctions -> LogIn
-		//EpiesaFunc.LogIn(pcdriver);
-		
-		//Call InspectionParts method
+		// EpiesaFunc.LogIn(pcdriver);
+
+		// Call InspectionParts method
 		EpiesaFunc.InpectionParts(pcdriver, "Honda");
+	
+		//Call ShippingDetails method
+		EpiesaFunc.ShippingDetails(pcdriver);
 	}
 
 }

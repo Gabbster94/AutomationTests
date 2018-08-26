@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class GetCredentialsFromFile {
+public class GetDataFromFile {
 
 	public static Properties readfile() throws IOException {
 		File file = new File("C:\\_DiskD\\Programare\\Git\\PrivateConfig\\Credentials.properties");
@@ -36,6 +36,15 @@ public class GetCredentialsFromFile {
 		if (App.equals("epiesa")) {
 			String Password = prop.getProperty("epiesaPassword");
 			return Password;
+		}
+		return null;
+	}
+	
+	public static String getPhoneNo(String App) throws IOException {
+		Properties prop = readfile();
+		if(App.equals("epiesa")) {
+			String PhoneNo = prop.getProperty("epiesaPhoneNo");
+			return PhoneNo;
 		}
 		return null;
 	}

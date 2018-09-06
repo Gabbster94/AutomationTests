@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [Epiesa Parallel TestCase]">
+  <parameter name="phoneNumber" value="0725560116"/>
+  <parameter name="webDriver" value="firefox"/>
+  <parameter name="carModel" value="Honda"/>
+  <test thread-count="5" name="InspectionPartsOrder [1](failed)">
+    <classes>
+      <class name="prvt.gabbster.RevisionTest">
+        <methods>
+          <include name="OrderRevisionParts" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- prvt.gabbster.RevisionTest -->
+    </classes>
+  </test> <!-- InspectionPartsOrder [1](failed) -->
+</suite> <!-- Failed suite [Epiesa Parallel TestCase] -->

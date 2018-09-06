@@ -1,0 +1,231 @@
+package prvt.gabbster;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+
+import baseFunctions.DriversPrepare;
+import baseFunctions.EpiesaFunctions;
+import baseFunctions.GetDataFromFile;
+
+public class Base {
+
+	private static String phoneNumber;
+	private static String webDriver;
+	private static String carModel;
+
+	public String getCarModel() {
+		return carModel;
+	}
+
+	public void setCarModel(String carModel) {
+		Base.carModel = carModel;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		Base.phoneNumber = phoneNumber;
+	}
+
+	public String getWebDriver() {
+		return webDriver;
+	}
+
+	public void setWebDriver(String webDriver) {
+		Base.webDriver = webDriver;
+	}
+
+	public static Properties readfile() throws IOException {
+		File file = new File("C:\\_DiskD\\Programare\\Git\\PrivateConfig\\Credentials.properties");
+
+		FileInputStream fileInput = null;
+		fileInput = new FileInputStream(file);
+
+		Properties prop = new Properties();
+
+		// load properties file
+		prop.load(fileInput);
+
+		return prop;
+	}
+
+	public static String getUsernameFromFile(String App) throws IOException {
+		Properties prop = readfile();
+		if (App.equals("epiesa")) {
+			String Username = prop.getProperty("epiesaEmail");
+			return Username;
+		}
+		return null;
+
+	}
+
+	public static String getPasswordFromFile(String App) throws IOException {
+		Properties prop = readfile();
+		if (App.equals("epiesa")) {
+			String Password = prop.getProperty("epiesaPassword");
+			return Password;
+		}
+		return null;
+	}
+
+	public static String getPhoneNo(String App) throws IOException {
+		Properties prop = readfile();
+		if (App.equals("epiesa")) {
+			String PhoneNo = prop.getProperty("epiesaPhoneNo");
+			return PhoneNo;
+		}
+		return null;
+	}
+
+	public WebDriver DesktopPrepare(String WebDriver) {
+		// Initialize WebDriver
+		WebDriver pcdriver = null;
+
+		// If wanted browser is Firefox
+		if (WebDriver.equals("firefox")) {
+			// Set the path for Firefox driver
+			System.setProperty("webdriver.gecko.driver",
+					"C:\\_DiskD\\Programare\\Git\\AutomationTests\\libs\\geckodriver.exe");
+			pcdriver = new FirefoxDriver();
+
+		}
+		// If wanted browser is Chrome
+		else if (WebDriver.equals("chrome")) {
+			// Set the path for Chrome driver
+			System.setProperty("webdriver.chrome.driver",
+					"C:\\_DiskD\\Programare\\Git\\AutomationTests\\libs\\chromedriver.exe");
+			pcdriver = new ChromeDriver();
+
+		}
+
+		// Add implicitly wait of 20 seconds
+		pcdriver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+
+		return pcdriver;
+	}
+
+	// ***************************************************************************
+
+	public void LogIn(WebDriver pcdriver) throws IOException {
+
+		// Navigate to epiesa
+		pcdriver.get("http://epiesa.ro/");
+
+		// Open login page and login
+		pcdriver.findElement(By.linkText("LOGIN/")).click();
+		pcdriver.findElement(By.xpath("//input[@name= 'login_utilizator']"))
+				.sendKeys(GetDataFromFile.getUsernameFromFile("epiesa"));
+		pcdriver.findElement(By.xpath("//input[@name= 'login_parola']"))
+				.sendKeys(GetDataFromFile.getPasswordFromFile("epiesa"));
+		pcdriver.findElement(By.xpath("//input[@value = 'AUTENTIFICARE']")).click();
+	}
+
+	public void InspectionParts(WebDriver pcdriver, String carModel) throws IOException, InterruptedException {
+		// Log into Epiesa
+		LogIn(pcdriver);
+		Thread.sleep(1000);
+
+		// Open "Piese Auto" page
+		pcdriver.findElement(By.linkText("Piese auto")).click();
+
+		// If CarModel is: Honda
+		if (carModel.equals("Honda")) {
+			// select Marca HONDA
+			WebElement marca = pcdriver
+					.findElement(By.xpath("/html/body/div[1]/section[1]/div[2]/div[2]/form/div[1]/div/div/select"));
+			Select omarca = new Select(marca);
+			omarca.selectByVisibleText("HONDA");
+
+			// select Modelul CIVIC
+			WebElement model = pcdriver.findElement(By.xpath("//*[@id=\"select2\"]"));
+			Select omodel = new Select(model);
+			omodel.selectByVisibleText("CIVIC VIII Hatchback (FN, FK) (2005 - prezent)");
+
+			// click on motorizare 1.8 benzina
+			pcdriver.findElement(By.linkText("R18A2")).click();
+
+			// click on filtru de aer
+			pcdriver.findElement(By.linkText("Filtru aer")).click();
+			pcdriver.findElement(
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[8]/div[2]/div[2]/div[2]/form/a"))
+					.click();
+
+			// go back to piese auto
+			pcdriver.navigate().back();
+			pcdriver.navigate().back();
+
+			// click on polen
+			pcdriver.findElement(By.linkText("Filtru polen")).click();
+			pcdriver.findElement(
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[15]/div[2]/div[2]/div[2]/form/a"))
+					.click();
+
+			// go back to piese auto
+			pcdriver.navigate().back();
+			pcdriver.navigate().back();
+
+			// click on filtru ulei
+			pcdriver.findElement(By.linkText("Filtru ulei")).click();
+			pcdriver.findElement(
+					By.xpath("/html/body/div[1]/section[1]/div/div[2]/div[3]/div[18]/div[2]/div[2]/div[2]/form/a"))
+					.click();
+
+			// search in 'cauta dupa cod piesa' and Adauga Cos ulei motor castrol edge 5w30
+			// 4L
+			WebElement uleimotor = pcdriver.findElement(By.xpath("/html/body/div[1]/header/div[2]/form/div[2]/input"));
+			uleimotor.sendKeys("ULEI MOTOR CASTROL EDGE TITANIUM LL 5W30 4L" + Keys.ENTER);
+			pcdriver.findElement(By.xpath("/html/body/div[1]/section[1]/div/div[2]/div/div/div[2]/div/div[2]/form/a"))
+					.click();
+		}
+		// If CarModel is: VW
+
+	}
+
+	public void ShippingDetails(WebDriver pcdriver) {
+
+		// Select Ridic personal comanda din Iuliu maniu
+		WebElement alegelocatia = pcdriver.findElement(By.id("id_locatie_livrare"));
+		Select oalegelocatia = new Select(alegelocatia);
+		oalegelocatia.selectByValue("56527");
+
+		// Complete Phone Num date contact
+		pcdriver.findElement(By.xpath("//input[@name= 'telefon_contact']")).sendKeys("0725560116");
+		pcdriver.findElement(By.name("observatii")).sendKeys("This textarea is automated completed by a script.");
+
+		// accept termenii si conditiile
+		pcdriver.findElement(By.xpath("//input[@name= 'termeni_si_conditii']")).click();
+	}
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+
+		// Initilize pcdriver
+		WebDriver pcdriver = null;
+		pcdriver = DriversPrepare.DesktopPrepare("firefox");
+
+		// Create object of Epiesa Function class
+		EpiesaFunctions EpiesaFunc = new EpiesaFunctions();
+
+		// Call EpiesaFunctions -> LogIn
+		// EpiesaFunc.LogIn(pcdriver);
+
+		// Call InspectionParts method
+		EpiesaFunc.InpectionParts(pcdriver, "Honda");
+
+		// Call ShippingDetails method
+		EpiesaFunc.ShippingDetails(pcdriver);
+	}
+
+}

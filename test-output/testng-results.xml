@@ -2,12 +2,12 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Epiesa Parallel TestCase" duration-ms="19642" started-at="2018-09-06T20:15:51Z" finished-at="2018-09-06T20:16:10Z">
+  <suite name="Epiesa Parallel TestCase" duration-ms="19034" started-at="2018-09-08T15:21:46Z" finished-at="2018-09-08T15:22:05Z">
     <groups>
     </groups>
-    <test name="InspectionPartsOrder [1]" duration-ms="19642" started-at="2018-09-06T20:15:51Z" finished-at="2018-09-06T20:16:10Z">
+    <test name="InspectionPartsOrder [1]" duration-ms="19034" started-at="2018-09-08T15:21:46Z" finished-at="2018-09-08T15:22:05Z">
       <class name="prvt.gabbster.RevisionTest">
-        <test-method status="PASS" signature="OrderRevisionParts(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:prvt.gabbster.RevisionTest@5c7fa833]" name="OrderRevisionParts" duration-ms="19620" started-at="2018-09-06T20:15:51Z" finished-at="2018-09-06T20:16:10Z">
+        <test-method status="PASS" signature="OrderRevisionParts(java.lang.String, java.lang.String, java.lang.String)[pri:0, instance:prvt.gabbster.RevisionTest@5c7fa833]" name="OrderRevisionParts" duration-ms="19014" started-at="2018-09-08T15:21:46Z" finished-at="2018-09-08T15:22:05Z">
           <params>
             <param index="0">
               <value>
